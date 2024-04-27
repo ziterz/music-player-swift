@@ -62,7 +62,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 5
+    view.spacing = 4
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -110,9 +110,11 @@ class MusicPlayerViewController: UIViewController {
     
     view.addSubview(trackDurationSlider)
     trackDurationSlider.snp.makeConstraints { make in
-      make.top.equalTo(stackCardView.snp.bottom).offset(-5)
+      make.top.equalTo(stackCardView.snp.bottom).offset(-4)
       make.left.right.equalToSuperview()
     }
+    
+    view.clipsToBounds = true
     view.isHidden = true
     
     return view
@@ -122,7 +124,6 @@ class MusicPlayerViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setUI()
-    
     listTableView.register(TrackViewCell.self, forCellReuseIdentifier: "cell")
     listTableView.dataSource = self
     listTableView.delegate = self
@@ -173,16 +174,16 @@ class MusicPlayerViewController: UIViewController {
       .store(in: &subscriptions)
     
     musicPlayerViewModel.$maxCurrentDuration
-        .sink { [weak self] duration in
-            self?.trackDurationSlider.maximumValue = Float(duration)
-        }
-        .store(in: &subscriptions)
+      .sink { [weak self] duration in
+        self?.trackDurationSlider.maximumValue = Float(duration)
+      }
+      .store(in: &subscriptions)
     
     musicPlayerViewModel.$currentDuration
-        .sink { [weak self] duration in
-            self?.trackDurationSlider.value = Float(duration)
-        }
-        .store(in: &subscriptions)
+      .sink { [weak self] duration in
+        self?.trackDurationSlider.value = Float(duration)
+      }
+      .store(in: &subscriptions)
     
     musicPlayerViewModel.$currentTrackName
       .sink { [weak self] trackName in
@@ -198,7 +199,7 @@ class MusicPlayerViewController: UIViewController {
   }
   
   private func addTargets() {
-      playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
+    playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
   }
   
   @objc private func playPauseButtonTapped() {
@@ -227,7 +228,35 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
+      trackCell.contentView.backgroundColor = UIColor(red: 17/255.0, green: 17/255.0, blue: 17/255.0, alpha: 1)
+      trackCell.trackNameLabel.textColor = .systemBlue
+      trackCell.playPauseButton.isHidden = false
+    }
+    
     cardView.isHidden = false
+    
     musicPlayerViewModel.startPlay(trackIndex: indexPath.row)
+  }
+  
+  func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
+      trackCell.contentView.backgroundColor = .black
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
+      trackCell.trackNameLabel.textColor = .white
+      trackCell.playPauseButton.isHidden = true
+    }
+    
+  }
+  
+  
+  func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
+      trackCell.contentView.backgroundColor = .clear
+    }
   }
 }
