@@ -10,7 +10,7 @@ import UIKit
 class TrackViewCell: UITableViewCell {
   
   // MARK: Properties
-  private lazy var trackNameLabel: UILabel = {
+  public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
     label.textColor = .white
     label.font = .systemFont(ofSize: 19, weight: .semibold)
@@ -28,6 +28,17 @@ class TrackViewCell: UITableViewCell {
     return label
   }()
   
+  public lazy var playPauseButton: UIButton = {
+    let button = UIButton()
+    button.tintColor = .systemBlue
+    let image = UIImage(systemName: "waveform", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
+    button.setImage(image, for: .normal)
+    button.imageView?.addSymbolEffect(.variableColor.iterative.dimInactiveLayers.nonReversing)
+    button.isHidden = true
+    
+    return button
+  }()
+  
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
@@ -38,14 +49,24 @@ class TrackViewCell: UITableViewCell {
     return view
   }()
   
+  private lazy var stackCardView: UIStackView = {
+    let view = UIStackView()
+    view.axis = .horizontal
+    view.distribution = .equalSpacing
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.addArrangedSubview(stackView)
+    view.addArrangedSubview(playPauseButton)
+    
+    return view
+  }()
+  
   public func configure(with data: Track) {
     self.trackNameLabel.text = data.trackName
     self.trackArtistLabel.text = data.artistName
     
-    self.addSubview(stackView)
-    stackView.snp.makeConstraints { make in
-      make.left.equalToSuperview().inset(16)
-      make.centerY.equalToSuperview()
+    self.addSubview(stackCardView)
+    stackCardView.snp.makeConstraints { make in
+      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 15, right: 16))
     }
   }
   
