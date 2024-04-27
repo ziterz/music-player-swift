@@ -27,9 +27,9 @@ class MusicPlayerViewController: UIViewController {
   
   private let titleTopLabel: UILabel = {
     let label = UILabel()
-    label.text = "Today's Top Hits"
+    label.text = "Listen Now"
     label.textColor = .white
-    label.font = .systemFont(ofSize: 24, weight: .bold)
+    label.font = .systemFont(ofSize: 28, weight: .bold)
     
     return label
   }()
@@ -43,7 +43,6 @@ class MusicPlayerViewController: UIViewController {
   
   private lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.text = "Oh Caroline"
     label.textColor = .white
     label.font = .systemFont(ofSize: 19, weight: .semibold)
     label.textAlignment = .left
@@ -53,7 +52,6 @@ class MusicPlayerViewController: UIViewController {
   
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
-    label.text = "The 1975"
     label.textColor = .lightGray
     label.font = .systemFont(ofSize: 16, weight: .semibold)
     label.textAlignment = .left
@@ -107,15 +105,15 @@ class MusicPlayerViewController: UIViewController {
     
     view.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
-      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16))
+      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 15, right: 16))
     }
     
     view.addSubview(trackDurationSlider)
     trackDurationSlider.snp.makeConstraints { make in
-      make.top.equalTo(stackCardView.snp.bottom)
+      make.top.equalTo(stackCardView.snp.bottom).offset(-5)
       make.left.right.equalToSuperview()
-      make.height.equalTo(20)
     }
+    view.isHidden = true
     
     return view
   }()
@@ -129,6 +127,7 @@ class MusicPlayerViewController: UIViewController {
     listTableView.dataSource = self
     listTableView.delegate = self
     musicPlayerViewModel.loadListMusics()
+    addTargets()
     bindToViewModel()
   }
   
@@ -168,22 +167,20 @@ class MusicPlayerViewController: UIViewController {
       .sink { [weak self] state in
         guard let self = self else { return }
         let imageName = state ? "pause.fill" : "play.fill"
-        let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 40)))
-        self.playPauseButton.setImage(image, for: .normal)
+        let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 32)))
+        playPauseButton.setImage(image, for: .normal)
       }
       .store(in: &subscriptions)
     
     musicPlayerViewModel.$maxCurrentDuration
         .sink { [weak self] duration in
             self?.trackDurationSlider.maximumValue = Float(duration)
-            let dateFormatter = DateFormatter()
         }
         .store(in: &subscriptions)
     
     musicPlayerViewModel.$currentDuration
         .sink { [weak self] duration in
             self?.trackDurationSlider.value = Float(duration)
-            let dateFormatter = DateFormatter()
         }
         .store(in: &subscriptions)
     
@@ -198,6 +195,14 @@ class MusicPlayerViewController: UIViewController {
         self?.trackArtistLabel.text = trackArtist
       }
       .store(in: &subscriptions)
+  }
+  
+  private func addTargets() {
+      playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
+  }
+  
+  @objc private func playPauseButtonTapped() {
+    musicPlayerViewModel.pauseTrack()
   }
 }
 
@@ -222,6 +227,7 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    cardView.isHidden = false
     musicPlayerViewModel.startPlay(trackIndex: indexPath.row)
   }
 }
