@@ -11,10 +11,7 @@ import SnapKit
 class MusicListViewController: UIViewController {
   
   // MARK: Properties
-  private var tracks: [Track] = [
-    Track(trackName: "About You", artistName: "The 1975", trackURL: "", trackPoster: ""),
-    Track(trackName: "Oh Caroline", artistName: "The 1975", trackURL: "", trackPoster: "")
-  ]
+  let musicListViewModel = MusicListViewModel()
   
   private let artistTextField: UITextField = {
     let view = UITextField()
@@ -48,6 +45,7 @@ class MusicListViewController: UIViewController {
     listTableView.register(TrackViewCell.self, forCellReuseIdentifier: "cell")
     listTableView.dataSource = self
     listTableView.delegate = self
+    musicListViewModel.loadListMusics()
   }
   
   // MARK: Private Methods
@@ -57,7 +55,7 @@ class MusicListViewController: UIViewController {
     view.addSubview(artistTextField)
     artistTextField.snp.makeConstraints { make in
       make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-      make.left.right.equalToSuperview().inset(30)
+      make.left.right.equalToSuperview().inset(16)
       make.height.equalTo(40)
     }
     
@@ -79,14 +77,15 @@ class MusicListViewController: UIViewController {
 extension MusicListViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return tracks.count
+    return musicListViewModel.getListMusicsCount()
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let trackCell = listTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TrackViewCell else {
       return UITableViewCell()
     }
-    trackCell.configure(with: tracks[indexPath.item])
+    let trackList = musicListViewModel.getTracks()
+    trackCell.configure(with: trackList[indexPath.item])
     trackCell.backgroundColor = .clear
     return trackCell
   }
