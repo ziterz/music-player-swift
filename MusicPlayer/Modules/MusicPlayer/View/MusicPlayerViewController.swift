@@ -44,7 +44,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var trackNameLabel: UILabel = {
     let label = UILabel()
     label.textColor = .black
-    label.font = .systemFont(ofSize: 19, weight: .semibold)
+    label.font = .systemFont(ofSize: 18, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -53,7 +53,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 16, weight: .semibold)
+    label.font = .systemFont(ofSize: 15, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -62,7 +62,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 4
+    view.spacing = 0
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -232,6 +232,11 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
     }
     let trackList = MusicService.shared.newTracks
     trackCell.configure(with: trackList[indexPath.item])
+    
+    let backgroundView = UIView()
+    backgroundView.backgroundColor = .systemGray6
+    trackCell.selectedBackgroundView = backgroundView
+    
     return trackCell
   }
   
@@ -240,35 +245,7 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .systemGray6
-      trackCell.trackNameLabel.textColor = .systemBlue
-      trackCell.playPauseButton.isHidden = false
-    }
-    
     cardView.isHidden = false
     musicPlayerViewModel.startPlay(trackIndex: indexPath.row)
-  }
-  
-  func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .systemGray6
-    }
-  }
-  
-  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .white
-      trackCell.trackNameLabel.textColor = .black
-      trackCell.playPauseButton.isHidden = true
-    }
-    
-  }
-  
-  
-  func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .clear
-    }
   }
 }

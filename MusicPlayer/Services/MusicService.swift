@@ -62,7 +62,7 @@ final class MusicService: MusicServiceProtocol {
       pause()
     } else {
       currentTrackIndex = trackIndex
-      
+  
       let url = URL(string: newTracks[trackIndex].preview)
       let playerItem: AVPlayerItem = AVPlayerItem(url: url!)
       musicPlayer.replaceCurrentItem(with: playerItem)

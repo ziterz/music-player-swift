@@ -19,4 +19,14 @@ final class DeezerAPI {
       .map { $0.data }
       .eraseToAnyPublisher()
   }
+  
+  func searchTracksByArtist(name: String) -> AnyPublisher<[Datum], Error> {
+    let url = URL(string: "https://api.deezer.com/search?q=\(name)")!
+    
+    return URLSession.shared.dataTaskPublisher(for: url)
+      .map(\.data)
+      .decode(type: DeezerTrack.self, decoder: JSONDecoder())
+      .map { $0.data }
+      .eraseToAnyPublisher()
+  }
 }

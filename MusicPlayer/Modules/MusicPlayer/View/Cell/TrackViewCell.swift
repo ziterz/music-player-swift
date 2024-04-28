@@ -42,7 +42,7 @@ class TrackViewCell: UITableViewCell {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 4
+    view.spacing = 0
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -76,6 +76,14 @@ class TrackViewCell: UITableViewCell {
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
+    
+    if selected {
+      trackNameLabel.textColor = .systemBlue
+      playPauseButton.isHidden = false
+    } else {
+      trackNameLabel.textColor = .label
+      playPauseButton.isHidden = true
+    }
   }
   
   override func prepareForReuse() {
