@@ -1,5 +1,5 @@
 //
-//  MusicViewCell.swift
+//  TrackViewCell.swift
 //  MusicPlayer
 //
 //  Created by Ziady Mubaraq on 27/04/24.
@@ -9,11 +9,13 @@ import UIKit
 
 class TrackViewCell: UITableViewCell {
   
-  // MARK: Properties
+  let musicPlayerViewModel = MusicPlayerViewModel()
+  
+  // MARK: - Views
   public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .white
-    label.font = .systemFont(ofSize: 19, weight: .semibold)
+    label.textColor = UIColor(cgColor: .init(red: 34/255.0, green: 34/255.0, blue: 34/255.0, alpha: 1))
+    label.font = .systemFont(ofSize: 16, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -22,16 +24,16 @@ class TrackViewCell: UITableViewCell {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 16, weight: .semibold)
+    label.font = .systemFont(ofSize: 14, weight: .medium)
     label.textAlignment = .left
     
     return label
   }()
   
-  public lazy var playPauseButton: UIButton = {
+  public lazy var waveformIcon: UIButton = {
     let button = UIButton()
     button.tintColor = .systemBlue
-    let image = UIImage(systemName: "waveform", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
+    let image = UIImage(systemName: "waveform", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24)))
     button.setImage(image, for: .normal)
     button.imageView?.addSymbolEffect(.variableColor.iterative.dimInactiveLayers.nonReversing)
     button.isHidden = true
@@ -42,7 +44,7 @@ class TrackViewCell: UITableViewCell {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 4
+    view.spacing = 0
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -55,27 +57,36 @@ class TrackViewCell: UITableViewCell {
     view.distribution = .equalSpacing
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addArrangedSubview(stackView)
-    view.addArrangedSubview(playPauseButton)
+    view.addArrangedSubview(waveformIcon)
     
     return view
   }()
   
-  public func configure(with data: Track) {
-    self.trackNameLabel.text = data.trackName
-    self.trackArtistLabel.text = data.artistName
+  // MARK: - Functions
+  func configureCell(track: Datum) {
+    self.trackNameLabel.text = track.title
+    self.trackArtistLabel.text = track.artist.name
     
     self.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
-      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 15, right: 16))
+      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 10, right: 16))
     }
   }
-  
+
   override func awakeFromNib() {
     super.awakeFromNib()
   }
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
+    
+    if selected {
+      trackNameLabel.textColor = .systemBlue
+      waveformIcon.isHidden = false
+    } else {
+      trackNameLabel.textColor = UIColor(cgColor: .init(red: 34/255.0, green: 34/255.0, blue: 34/255.0, alpha: 1))
+      waveformIcon.isHidden = true
+    }
   }
   
   override func prepareForReuse() {

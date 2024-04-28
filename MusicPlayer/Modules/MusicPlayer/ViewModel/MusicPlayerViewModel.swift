@@ -11,69 +11,120 @@ import MediaPlayer
 import Combine
 
 protocol MusicPlayerViewModelProtocol {
-  func loadListMusics()
-  func getListMusicsCount() -> Int
-  func getTracks() -> [Track]
+  func fetchTracks()
+  func startPlay(trackIndex: Int)
+  func pauseTrack()
 }
 
 final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
   
-  //MARK: Properties
-  @Published var currentDuration: Double = 0
+  // MARK: - Properties
+  let deezerAPI = DeezerAPI()
+  
+  @Published var isLoading = false
+  @Published var currentTrackIndex = 0
   @Published var maxCurrentDuration: Double = 0
+  @Published var currentDuration: Double = 0
+  @Published var isPlaying = false
   @Published var currentTrackName: String = ""
   @Published var currentTrackArtist: String = ""
-  @Published var isPlaying: Bool = false
+  @Published var tracks: [Datum] = []
   
-  private var subscriptions = Set<AnyCancellable>()
+  var subscriptions = Set<AnyCancellable>()
+  let musicPlayer = AVPlayer()
   
-  //MARK: Functions
-  func loadListMusics() {
-    MusicService.shared.loadMusic()
+  // MARK: - Functions
+  func fetchTracks() {
+    isLoading = true
+    deezerAPI.fetchTracks()
+      .sink(
+        receiveCompletion: { status in
+          switch status {
+          case .finished:
+            print("Completed")
+            break
+          case .failure(let error):
+            print("Receiver error \(error)")
+            break
+          }
+        },
+        receiveValue: { tracks in
+          print("Data received")
+          self.tracks = tracks
+          self.isLoading = false
+        }
+      )
+      .store(in: &subscriptions)
   }
   
-  func getListMusicsCount() -> Int {
-    MusicService.shared.newTracks.count
+  func searchArtistName(name: String) {
+    isLoading = true
+    deezerAPI.searchTracksByArtist(name: name)
+      .sink(
+        receiveCompletion: { status in
+          switch status {
+          case .finished:
+            print("Completed")
+            break
+          case .failure(let error):
+            print("Receiver error \(error)")
+            break
+          }
+        },
+        receiveValue: { tracks in
+          print("Data received")
+          self.tracks = tracks
+          self.isLoading = false
+        }
+      )
+      .store(in: &subscriptions)
   }
   
-  func getTracks() -> [Track] {
-    MusicService.shared.newTracks
+  func addObservers() {
+    NotificationCenter.default.addObserver(self, selector: #selector(trackDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: musicPlayer.currentItem)
+    if let duration = musicPlayer.currentItem?.asset.duration.seconds {
+      self.maxCurrentDuration = duration
+    }
+    musicPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1000), queue: DispatchQueue.main) { (time) in
+      self.currentDuration = time.seconds
+    }
+  }
+  
+  @objc func trackDidEnded() {
+    NotificationCenter.default.removeObserver(self)
+    var newTrackIndex = currentTrackIndex
+    if newTrackIndex == tracks.count - 1 {
+      newTrackIndex = 0
+    } else {
+      newTrackIndex += 1
+    }
+    startPlay(trackIndex: newTrackIndex)
   }
   
   func startPlay(trackIndex: Int) {
-      MusicService.shared.play(trackIndex: trackIndex)
-    addObservers()
+    if currentTrackIndex == trackIndex && isPlaying == true {
+      pauseTrack()
+    } else {
+      currentTrackIndex = trackIndex
+      
+      let url = URL(string: tracks[trackIndex].preview)
+      let playerItem: AVPlayerItem = AVPlayerItem(url: url!)
+      currentTrackName = tracks[trackIndex].title
+      currentTrackArtist = tracks[trackIndex].artist.name ?? "-"
+      musicPlayer.replaceCurrentItem(with: playerItem)
+      musicPlayer.play()
+      isPlaying = true
+      addObservers()
+    }
   }
   
   func pauseTrack() {
-      MusicService.shared.pause()
-  }
-  
-  // MARK: Private functions
-  private func addObservers() {
-    MusicService.shared.$isPlaying
-      .sink { [weak self] state in
-        self?.isPlaying = state
-      }
-      .store(in: &subscriptions)
-    
-    MusicService.shared.$currentTrackIndex
-      .sink { [weak self] index in
-        self?.currentTrackName = MusicService.shared.newTracks[index].trackName
-        self?.currentTrackArtist = MusicService.shared.newTracks[index].artistName
-      }
-      .store(in: &subscriptions)
-    
-    MusicService.shared.$maxCurrentDuration
-      .sink { [weak self] duration in
-        self?.maxCurrentDuration = duration
-      }
-      .store(in: &subscriptions)
-    
-    MusicService.shared.$currentDuration
-      .sink { [weak self] duration in
-        self?.currentDuration = duration
-      }
-      .store(in: &subscriptions)
+    if musicPlayer.timeControlStatus == .playing {
+      musicPlayer.pause()
+      isPlaying = false
+    } else if musicPlayer.timeControlStatus == .paused {
+      musicPlayer.play()
+      isPlaying = true
+    }
   }
 }
