@@ -11,9 +11,11 @@ import MediaPlayer
 import Combine
 
 protocol MusicPlayerViewModelProtocol {
-  func loadListMusics()
+  func fetchTracks()
   func getListMusicsCount() -> Int
-  func getTracks() -> [Track]
+  func getTracks() -> [Datum]
+  func startPlay(trackIndex: Int)
+  func pauseTrack()
 }
 
 final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
@@ -27,29 +29,29 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
   
   private var subscriptions = Set<AnyCancellable>()
   
-  //MARK: Functions
-  func loadListMusics() {
-    MusicService.shared.loadMusic()
+  func startPlay(trackIndex: Int) {
+    MusicService.shared.play(trackIndex: trackIndex)
+    addObservers()
+  }
+  
+  func pauseTrack() {
+    MusicService.shared.pause()
+  }
+  
+  //MARK: - Functions
+  func fetchTracks() {
+    MusicService.shared.fetchTracks()
   }
   
   func getListMusicsCount() -> Int {
     MusicService.shared.newTracks.count
   }
   
-  func getTracks() -> [Track] {
+  func getTracks() -> [Datum] {
     MusicService.shared.newTracks
   }
   
-  func startPlay(trackIndex: Int) {
-      MusicService.shared.play(trackIndex: trackIndex)
-    addObservers()
-  }
-  
-  func pauseTrack() {
-      MusicService.shared.pause()
-  }
-  
-  // MARK: Private functions
+  // MARK: - Private functions
   private func addObservers() {
     MusicService.shared.$isPlaying
       .sink { [weak self] state in
@@ -59,8 +61,8 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
     
     MusicService.shared.$currentTrackIndex
       .sink { [weak self] index in
-        self?.currentTrackName = MusicService.shared.newTracks[index].trackName
-        self?.currentTrackArtist = MusicService.shared.newTracks[index].artistName
+        self?.currentTrackName = MusicService.shared.newTracks[index].title
+        self?.currentTrackArtist = MusicService.shared.newTracks[index].artist.name ?? "-"
       }
       .store(in: &subscriptions)
     

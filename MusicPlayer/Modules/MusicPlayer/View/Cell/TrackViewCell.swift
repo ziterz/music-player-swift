@@ -12,8 +12,8 @@ class TrackViewCell: UITableViewCell {
   // MARK: Properties
   public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .white
-    label.font = .systemFont(ofSize: 19, weight: .semibold)
+    label.textColor = .black
+    label.font = .systemFont(ofSize: 18, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -22,7 +22,7 @@ class TrackViewCell: UITableViewCell {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 16, weight: .semibold)
+    label.font = .systemFont(ofSize: 15, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -60,9 +60,9 @@ class TrackViewCell: UITableViewCell {
     return view
   }()
   
-  public func configure(with data: Track) {
-    self.trackNameLabel.text = data.trackName
-    self.trackArtistLabel.text = data.artistName
+  public func configure(with data: Datum) {
+    self.trackNameLabel.text = data.title
+    self.trackArtistLabel.text = data.artist.name
     
     self.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
