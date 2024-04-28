@@ -1,5 +1,5 @@
 //
-//  Track.swift
+//  SearchTrack.swift
 //  MusicPlayer
 //
 //  Created by Ziady Mubaraq on 28/04/24.

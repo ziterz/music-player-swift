@@ -12,15 +12,15 @@ import UIKit
 extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return musicPlayerViewModel.newTracks.count
+    return musicPlayerViewModel.tracks.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let trackCell = listTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TrackViewCell else {
       return UITableViewCell()
     }
-    let trackList = musicPlayerViewModel.newTracks
-    trackCell.configure(with: trackList[indexPath.item])
+    let trackList = musicPlayerViewModel.tracks
+    trackCell.configureCell(track: trackList[indexPath.row])
     
     let backgroundView = UIView()
     backgroundView.backgroundColor = .systemGray6
@@ -30,7 +30,7 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 70
+    return 60
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

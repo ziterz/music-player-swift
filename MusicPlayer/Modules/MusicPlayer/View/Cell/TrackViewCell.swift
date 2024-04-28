@@ -9,11 +9,13 @@ import UIKit
 
 class TrackViewCell: UITableViewCell {
   
+  let musicPlayerViewModel = MusicPlayerViewModel()
+  
   // MARK: - Views
   public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .black
-    label.font = .systemFont(ofSize: 18, weight: .medium)
+    label.textColor = UIColor(cgColor: .init(red: 34/255.0, green: 34/255.0, blue: 34/255.0, alpha: 1))
+    label.font = .systemFont(ofSize: 16, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -22,16 +24,16 @@ class TrackViewCell: UITableViewCell {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 15, weight: .medium)
+    label.font = .systemFont(ofSize: 14, weight: .medium)
     label.textAlignment = .left
     
     return label
   }()
   
-  public lazy var playPauseButton: UIButton = {
+  public lazy var waveformIcon: UIButton = {
     let button = UIButton()
     button.tintColor = .systemBlue
-    let image = UIImage(systemName: "waveform", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
+    let image = UIImage(systemName: "waveform", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24)))
     button.setImage(image, for: .normal)
     button.imageView?.addSymbolEffect(.variableColor.iterative.dimInactiveLayers.nonReversing)
     button.isHidden = true
@@ -55,22 +57,22 @@ class TrackViewCell: UITableViewCell {
     view.distribution = .equalSpacing
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addArrangedSubview(stackView)
-    view.addArrangedSubview(playPauseButton)
+    view.addArrangedSubview(waveformIcon)
     
     return view
   }()
   
   // MARK: - Functions
-  public func configure(with data: Datum) {
-    self.trackNameLabel.text = data.title
-    self.trackArtistLabel.text = data.artist.name
+  func configureCell(track: Datum) {
+    self.trackNameLabel.text = track.title
+    self.trackArtistLabel.text = track.artist.name
     
     self.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
-      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 15, right: 16))
+      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 10, right: 16))
     }
   }
-  
+
   override func awakeFromNib() {
     super.awakeFromNib()
   }
@@ -80,10 +82,10 @@ class TrackViewCell: UITableViewCell {
     
     if selected {
       trackNameLabel.textColor = .systemBlue
-      playPauseButton.isHidden = false
+      waveformIcon.isHidden = false
     } else {
-      trackNameLabel.textColor = .label
-      playPauseButton.isHidden = true
+      trackNameLabel.textColor = UIColor(cgColor: .init(red: 34/255.0, green: 34/255.0, blue: 34/255.0, alpha: 1))
+      waveformIcon.isHidden = true
     }
   }
   

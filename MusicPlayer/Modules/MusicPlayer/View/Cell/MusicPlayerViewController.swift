@@ -9,20 +9,20 @@ import UIKit
 import SnapKit
 import Combine
 
-class MusicPlayerViewController: UIViewController {
+class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   
   // MARK: - Properties
-  let musicPlayerViewModel = MusicPlayerViewModel()
   private var subscriptions = Set<AnyCancellable>()
+  let musicPlayerViewModel = MusicPlayerViewModel()
   
   // MARK: - Views
-  private let artistTextField: UITextField = {
-    let view = UITextField()
-    view.placeholder = "Search artist"
-    view.backgroundColor = .systemGray6
-    view.borderStyle = .roundedRect
+  private let artistSearchBar: UISearchBar = {
+    let searchBar = UISearchBar()
+    searchBar.searchTextField.borderStyle = .roundedRect
+    searchBar.searchTextField.placeholder = "Search artist"
+    searchBar.backgroundImage = UIImage()
     
-    return view
+    return searchBar
   }()
   
   private let titleTopLabel: UILabel = {
@@ -37,14 +37,15 @@ class MusicPlayerViewController: UIViewController {
   let listTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .clear
+    tableView.contentInset.bottom = 70
     
     return tableView
   }()
   
   private lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .black
-    label.font = .systemFont(ofSize: 18, weight: .medium)
+    label.textColor = .darkGray
+    label.font = .systemFont(ofSize: 16, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -53,7 +54,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 15, weight: .medium)
+    label.font = .systemFont(ofSize: 14, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -72,7 +73,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var playPauseButton: UIButton = {
     let button = UIButton()
     button.tintColor = .black
-    let image = UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 32)))
+    let image = UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
     button.setImage(image, for: .normal)
     
     return button
@@ -81,6 +82,7 @@ class MusicPlayerViewController: UIViewController {
   private let trackDurationSlider: UISlider = {
     let slider = UISlider()
     slider.thumbTintColor = .clear
+    slider.maximumTrackTintColor = .white
     slider.isUserInteractionEnabled = false
     slider.minimumValue = 0
     slider.value = 0
@@ -105,12 +107,12 @@ class MusicPlayerViewController: UIViewController {
     
     view.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
-      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 15, right: 16))
+      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 12, right: 16))
     }
     
     view.addSubview(trackDurationSlider)
     trackDurationSlider.snp.makeConstraints { make in
-      make.top.equalTo(stackCardView.snp.bottom).offset(-3)
+      make.top.equalTo(stackCardView.snp.bottom).offset(-6)
       make.left.right.equalToSuperview()
     }
     
@@ -118,9 +120,10 @@ class MusicPlayerViewController: UIViewController {
     
     let container = UIView()
     container.layer.shadowColor = UIColor.lightGray.cgColor
-    container.layer.shadowOpacity = 0.5
+    container.layer.shadowOpacity = 0.7
     container.layer.shadowOffset = .zero
     container.layer.shadowRadius = 10
+    
     container.addSubview(view)
     view.snp.makeConstraints { make in
       make.edges.equalToSuperview()
@@ -143,20 +146,19 @@ class MusicPlayerViewController: UIViewController {
     bindToViewModel()
   }
   
-  // MARK: Private Methods
+  // MARK: - Private Methods
   private func setUI() {
     view.backgroundColor = .systemBackground
     
-    view.addSubview(artistTextField)
-    artistTextField.snp.makeConstraints { make in
+    view.addSubview(artistSearchBar)
+    artistSearchBar.snp.makeConstraints { make in
       make.top.equalTo(view.safeAreaLayoutGuide).offset(28)
-      make.left.right.equalToSuperview().inset(16)
-      make.height.equalTo(40)
+      make.left.right.equalToSuperview().inset(8)
     }
     
     view.addSubview(titleTopLabel)
     titleTopLabel.snp.makeConstraints { make in
-      make.top.equalTo(artistTextField.snp.bottom).offset(28)
+      make.top.equalTo(artistSearchBar.snp.bottom).offset(18)
       make.left.right.equalToSuperview().inset(16)
     }
     
@@ -180,7 +182,7 @@ class MusicPlayerViewController: UIViewController {
       .sink { [weak self] state in
         guard let self = self else { return }
         let imageName = state ? "pause.fill" : "play.fill"
-        let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 32)))
+        let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
         playPauseButton.setImage(image, for: .normal)
       }
       .store(in: &subscriptions)
@@ -208,10 +210,37 @@ class MusicPlayerViewController: UIViewController {
         self?.trackArtistLabel.text = trackArtist
       }
       .store(in: &subscriptions)
+    
+    musicPlayerViewModel.$tracks
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] _ in
+        self?.listTableView.reloadData()
+      }
+      .store(in: &subscriptions)
   }
   
   private func addTargets() {
     playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
+    artistSearchBar.delegate = self
+  }
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    musicPlayerViewModel.searchArtistName(name: searchBar.text ?? "")
+    artistSearchBar.endEditing(true)
+  }
+  
+  func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+    artistSearchBar.showsCancelButton = true
+    return true
+  }
+  
+  func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+    artistSearchBar.showsCancelButton = false
+    return true
+  }
+  
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    artistSearchBar.endEditing(true)
   }
   
   @objc private func playPauseButtonTapped() {
