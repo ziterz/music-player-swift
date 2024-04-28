@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		081468332EBA8DF804DE4E55 /* Pods_MusicPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F16410D53B918335A0089797 /* Pods_MusicPlayer.framework */; };
 		2EE6FF2A88F13F4E6E7B7607 /* Pods_MusicPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA42C6FDB63834CBBDCEFB9 /* Pods_MusicPlayerTests.framework */; };
+		75A4C4CD2BDEA10400DB7C9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75A4C4CC2BDEA10400DB7C9B /* Assets.xcassets */; };
 		75E2A8532BDCD04300F5BD73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8522BDCD04300F5BD73 /* AppDelegate.swift */; };
 		75E2A8552BDCD04300F5BD73 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8542BDCD04300F5BD73 /* SceneDelegate.swift */; };
-		75E2A85C2BDCD04400F5BD73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75E2A85B2BDCD04400F5BD73 /* Assets.xcassets */; };
 		75E2A85F2BDCD04400F5BD73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75E2A85D2BDCD04400F5BD73 /* LaunchScreen.storyboard */; };
 		75E2A86A2BDCD04400F5BD73 /* MusicPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8692BDCD04400F5BD73 /* MusicPlayerTests.swift */; };
 		75E2A8742BDCD04400F5BD73 /* MusicPlayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8732BDCD04400F5BD73 /* MusicPlayerUITests.swift */; };
@@ -46,10 +46,10 @@
 		1593ABB91D9F31C787BBCCBD /* Pods_MusicPlayer_MusicPlayerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MusicPlayer_MusicPlayerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		196D3710DCB9D379DC9CA114 /* Pods-MusicPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer.debug.xcconfig"; path = "Target Support Files/Pods-MusicPlayer/Pods-MusicPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		48E245729366A1A1517E30DE /* Pods-MusicPlayer-MusicPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer-MusicPlayerUITests.debug.xcconfig"; path = "Target Support Files/Pods-MusicPlayer-MusicPlayerUITests/Pods-MusicPlayer-MusicPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		75A4C4CC2BDEA10400DB7C9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75E2A84F2BDCD04300F5BD73 /* MusicPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusicPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75E2A8522BDCD04300F5BD73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75E2A8542BDCD04300F5BD73 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		75E2A85B2BDCD04400F5BD73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75E2A85E2BDCD04400F5BD73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75E2A8602BDCD04400F5BD73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75E2A8652BDCD04400F5BD73 /* MusicPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,8 +171,8 @@
 		75E2A8842BDCD2FC00F5BD73 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				75E2A85B2BDCD04400F5BD73 /* Assets.xcassets */,
 				75E2A85D2BDCD04400F5BD73 /* LaunchScreen.storyboard */,
+				75A4C4CC2BDEA10400DB7C9B /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -360,8 +360,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75A4C4CD2BDEA10400DB7C9B /* Assets.xcassets in Resources */,
 				75E2A85F2BDCD04400F5BD73 /* LaunchScreen.storyboard in Resources */,
-				75E2A85C2BDCD04400F5BD73 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,7 +678,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Music Player";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -713,7 +712,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Music Player";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
