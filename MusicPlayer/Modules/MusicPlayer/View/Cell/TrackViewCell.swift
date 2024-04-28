@@ -1,5 +1,5 @@
 //
-//  MusicViewCell.swift
+//  TrackViewCell.swift
 //  MusicPlayer
 //
 //  Created by Ziady Mubaraq on 27/04/24.
@@ -9,7 +9,7 @@ import UIKit
 
 class TrackViewCell: UITableViewCell {
   
-  // MARK: Properties
+  // MARK: - Views
   public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
     label.textColor = .black
@@ -60,6 +60,7 @@ class TrackViewCell: UITableViewCell {
     return view
   }()
   
+  // MARK: - Functions
   public func configure(with data: Datum) {
     self.trackNameLabel.text = data.title
     self.trackArtistLabel.text = data.artist.name

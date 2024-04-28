@@ -11,11 +11,11 @@ import Combine
 
 class MusicPlayerViewController: UIViewController {
   
-  // MARK: Properties
+  // MARK: - Properties
   let musicPlayerViewModel = MusicPlayerViewModel()
-  
   private var subscriptions = Set<AnyCancellable>()
   
+  // MARK: - Views
   private let artistTextField: UITextField = {
     let view = UITextField()
     view.placeholder = "Search artist"
@@ -34,7 +34,7 @@ class MusicPlayerViewController: UIViewController {
     return label
   }()
   
-  private let listTableView: UITableView = {
+  let listTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .clear
     
@@ -98,7 +98,7 @@ class MusicPlayerViewController: UIViewController {
     return view
   }()
   
-  private lazy var cardView: UIView = {
+  lazy var cardView: UIView = {
     let view = UIView()
     view.backgroundColor = .white
     view.layer.cornerRadius = 12
@@ -131,7 +131,7 @@ class MusicPlayerViewController: UIViewController {
     return container
   }()
   
-  // MARK: Lifecycle
+  // MARK: - Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
     setUI()
@@ -141,7 +141,6 @@ class MusicPlayerViewController: UIViewController {
     musicPlayerViewModel.fetchTracks()
     addTargets()
     bindToViewModel()
-    print(MusicService.shared.newTracks)
   }
   
   // MARK: Private Methods
@@ -217,35 +216,5 @@ class MusicPlayerViewController: UIViewController {
   
   @objc private func playPauseButtonTapped() {
     musicPlayerViewModel.pauseTrack()
-  }
-}
-
-extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return MusicService.shared.newTracks.count
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let trackCell = listTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TrackViewCell else {
-      return UITableViewCell()
-    }
-    let trackList = MusicService.shared.newTracks
-    trackCell.configure(with: trackList[indexPath.item])
-    
-    let backgroundView = UIView()
-    backgroundView.backgroundColor = .systemGray6
-    trackCell.selectedBackgroundView = backgroundView
-    
-    return trackCell
-  }
-  
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 70
-  }
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    cardView.isHidden = false
-    musicPlayerViewModel.startPlay(trackIndex: indexPath.row)
   }
 }

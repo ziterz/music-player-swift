@@ -19,9 +19,9 @@
 		75E2A8892BDCD73800F5BD73 /* MusicPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8882BDCD73800F5BD73 /* MusicPlayerViewController.swift */; };
 		75E2A8922BDCF53900F5BD73 /* TrackViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8912BDCF53800F5BD73 /* TrackViewCell.swift */; };
 		75E2A8972BDD14BE00F5BD73 /* MusicPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8962BDD14BE00F5BD73 /* MusicPlayerViewModel.swift */; };
-		75E2A8A32BDD881200F5BD73 /* DeezerTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8A22BDD881200F5BD73 /* DeezerTrack.swift */; };
-		75E2A8A52BDD897B00F5BD73 /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8A42BDD897B00F5BD73 /* MusicService.swift */; };
+		75E2A8A32BDD881200F5BD73 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8A22BDD881200F5BD73 /* Track.swift */; };
 		75E2A8AB2BDE15B600F5BD73 /* DeezerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8AA2BDE15B600F5BD73 /* DeezerAPI.swift */; };
+		75E2A8AD2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A8AC2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift */; };
 		7AA17AED83B4ECD802A196DE /* Pods_MusicPlayer_MusicPlayerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1593ABB91D9F31C787BBCCBD /* Pods_MusicPlayer_MusicPlayerUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,9 +60,9 @@
 		75E2A8882BDCD73800F5BD73 /* MusicPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewController.swift; sourceTree = "<group>"; };
 		75E2A8912BDCF53800F5BD73 /* TrackViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewCell.swift; sourceTree = "<group>"; };
 		75E2A8962BDD14BE00F5BD73 /* MusicPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewModel.swift; sourceTree = "<group>"; };
-		75E2A8A22BDD881200F5BD73 /* DeezerTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeezerTrack.swift; sourceTree = "<group>"; };
-		75E2A8A42BDD897B00F5BD73 /* MusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
+		75E2A8A22BDD881200F5BD73 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		75E2A8AA2BDE15B600F5BD73 /* DeezerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeezerAPI.swift; sourceTree = "<group>"; };
+		75E2A8AC2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicPlayerViewController + TableView.swift"; sourceTree = "<group>"; };
 		8860022378D4386FA6B7E8E5 /* Pods-MusicPlayer-MusicPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer-MusicPlayerUITests.release.xcconfig"; path = "Target Support Files/Pods-MusicPlayer-MusicPlayerUITests/Pods-MusicPlayer-MusicPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8CA42C6FDB63834CBBDCEFB9 /* Pods_MusicPlayerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MusicPlayerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C158C01C1FE3F73829AD8533 /* Pods-MusicPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer.release.xcconfig"; path = "Target Support Files/Pods-MusicPlayer/Pods-MusicPlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,8 +128,7 @@
 				75E2A8932BDCF78A00F5BD73 /* Models */,
 				75E2A8832BDCD2F700F5BD73 /* Modules */,
 				75E2A8842BDCD2FC00F5BD73 /* Resources */,
-				75E2A8982BDD182D00F5BD73 /* Services */,
-				75E2A8A92BDE15A200F5BD73 /* Utils */,
+				75E2A8A92BDE15A200F5BD73 /* Services */,
 				75E2A8602BDCD04400F5BD73 /* Info.plist */,
 			);
 			path = MusicPlayer;
@@ -200,6 +199,7 @@
 			children = (
 				75E2A8902BDCF50D00F5BD73 /* Cell */,
 				75E2A8882BDCD73800F5BD73 /* MusicPlayerViewController.swift */,
+				75E2A8AC2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -215,25 +215,17 @@
 		75E2A8932BDCF78A00F5BD73 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				75E2A8A22BDD881200F5BD73 /* DeezerTrack.swift */,
+				75E2A8A22BDD881200F5BD73 /* Track.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		75E2A8982BDD182D00F5BD73 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				75E2A8A42BDD897B00F5BD73 /* MusicService.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		75E2A8A92BDE15A200F5BD73 /* Utils */ = {
+		75E2A8A92BDE15A200F5BD73 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				75E2A8AA2BDE15B600F5BD73 /* DeezerAPI.swift */,
 			);
-			path = Utils;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		7C5C7A1EBCEC8BFF364F556F /* Frameworks */ = {
@@ -497,13 +489,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75E2A8A32BDD881200F5BD73 /* DeezerTrack.swift in Sources */,
+				75E2A8A32BDD881200F5BD73 /* Track.swift in Sources */,
+				75E2A8AD2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift in Sources */,
 				75E2A8922BDCF53900F5BD73 /* TrackViewCell.swift in Sources */,
 				75E2A8532BDCD04300F5BD73 /* AppDelegate.swift in Sources */,
 				75E2A8892BDCD73800F5BD73 /* MusicPlayerViewController.swift in Sources */,
 				75E2A8552BDCD04300F5BD73 /* SceneDelegate.swift in Sources */,
 				75E2A8AB2BDE15B600F5BD73 /* DeezerAPI.swift in Sources */,
-				75E2A8A52BDD897B00F5BD73 /* MusicService.swift in Sources */,
 				75E2A8972BDD14BE00F5BD73 /* MusicPlayerViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

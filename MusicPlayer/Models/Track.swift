@@ -1,5 +1,5 @@
 //
-//  DeezerTrack.swift
+//  Track.swift
 //  MusicPlayer
 //
 //  Created by Ziady Mubaraq on 28/04/24.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - DeezerTrack
-struct DeezerTrack: Codable {
+// MARK: - Track
+struct Track: Codable {
   let data: [Datum]
   let total: Int
   let next: String

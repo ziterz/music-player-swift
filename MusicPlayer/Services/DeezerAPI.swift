@@ -15,7 +15,7 @@ final class DeezerAPI {
     
     return URLSession.shared.dataTaskPublisher(for: url)
       .map(\.data)
-      .decode(type: DeezerTrack.self, decoder: JSONDecoder())
+      .decode(type: Track.self, decoder: JSONDecoder())
       .map { $0.data }
       .eraseToAnyPublisher()
   }
@@ -25,7 +25,7 @@ final class DeezerAPI {
     
     return URLSession.shared.dataTaskPublisher(for: url)
       .map(\.data)
-      .decode(type: DeezerTrack.self, decoder: JSONDecoder())
+      .decode(type: Track.self, decoder: JSONDecoder())
       .map { $0.data }
       .eraseToAnyPublisher()
   }
