@@ -11,15 +11,15 @@ import Combine
 
 class MusicPlayerViewController: UIViewController {
   
-  // MARK: Properties
+  // MARK: - Properties
+  let musicPlayerViewModel = MusicPlayerViewModel()
   private var subscriptions = Set<AnyCancellable>()
   
-  let musicPlayerViewModel = MusicPlayerViewModel()
-  
+  // MARK: - Views
   private let artistTextField: UITextField = {
     let view = UITextField()
     view.placeholder = "Search artist"
-    view.backgroundColor = .white
+    view.backgroundColor = .systemGray6
     view.borderStyle = .roundedRect
     
     return view
@@ -28,13 +28,13 @@ class MusicPlayerViewController: UIViewController {
   private let titleTopLabel: UILabel = {
     let label = UILabel()
     label.text = "Listen Now"
-    label.textColor = .white
+    label.textColor = .black
     label.font = .systemFont(ofSize: 28, weight: .bold)
     
     return label
   }()
   
-  private let listTableView: UITableView = {
+  let listTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .clear
     
@@ -43,8 +43,8 @@ class MusicPlayerViewController: UIViewController {
   
   private lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .white
-    label.font = .systemFont(ofSize: 19, weight: .semibold)
+    label.textColor = .black
+    label.font = .systemFont(ofSize: 18, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -53,7 +53,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 16, weight: .semibold)
+    label.font = .systemFont(ofSize: 15, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -62,7 +62,7 @@ class MusicPlayerViewController: UIViewController {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 4
+    view.spacing = 0
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -71,7 +71,7 @@ class MusicPlayerViewController: UIViewController {
   
   private lazy var playPauseButton: UIButton = {
     let button = UIButton()
-    button.tintColor = .white
+    button.tintColor = .black
     let image = UIImage(systemName: "pause.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 32)))
     button.setImage(image, for: .normal)
     
@@ -98,9 +98,9 @@ class MusicPlayerViewController: UIViewController {
     return view
   }()
   
-  private lazy var cardView: UIView = {
+  lazy var cardView: UIView = {
     let view = UIView()
-    view.backgroundColor = UIColor(red: 34/255.0, green: 34/255.0, blue: 34/255.0, alpha: 1)
+    view.backgroundColor = .white
     view.layer.cornerRadius = 12
     
     view.addSubview(stackCardView)
@@ -110,48 +110,53 @@ class MusicPlayerViewController: UIViewController {
     
     view.addSubview(trackDurationSlider)
     trackDurationSlider.snp.makeConstraints { make in
-      make.top.equalTo(stackCardView.snp.bottom).offset(-4)
+      make.top.equalTo(stackCardView.snp.bottom).offset(-3)
       make.left.right.equalToSuperview()
     }
     
     view.clipsToBounds = true
-    view.isHidden = true
     
-    return view
+    let container = UIView()
+    container.layer.shadowColor = UIColor.lightGray.cgColor
+    container.layer.shadowOpacity = 0.5
+    container.layer.shadowOffset = .zero
+    container.layer.shadowRadius = 10
+    container.addSubview(view)
+    view.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+    
+    container.isHidden = true
+    
+    return container
   }()
   
-  // MARK: Lifecycle
+  // MARK: - Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
     setUI()
     listTableView.register(TrackViewCell.self, forCellReuseIdentifier: "cell")
     listTableView.dataSource = self
     listTableView.delegate = self
-    musicPlayerViewModel.loadListMusics()
+    musicPlayerViewModel.fetchTracks()
     addTargets()
     bindToViewModel()
   }
   
   // MARK: Private Methods
   private func setUI() {
-    view.backgroundColor = UIColor(red: 17/255.0, green: 17/255.0, blue: 17/255.0, alpha: 1)
+    view.backgroundColor = .systemBackground
     
     view.addSubview(artistTextField)
     artistTextField.snp.makeConstraints { make in
-      make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+      make.top.equalTo(view.safeAreaLayoutGuide).offset(28)
       make.left.right.equalToSuperview().inset(16)
       make.height.equalTo(40)
     }
     
     view.addSubview(titleTopLabel)
     titleTopLabel.snp.makeConstraints { make in
-      make.top.equalTo(artistTextField.snp.bottom).offset(40)
-      make.left.right.equalToSuperview().inset(16)
-    }
-    
-    view.addSubview(cardView)
-    cardView.snp.makeConstraints { make in
-      make.bottom.equalTo(view.safeAreaLayoutGuide).inset(16)
+      make.top.equalTo(artistTextField.snp.bottom).offset(28)
       make.left.right.equalToSuperview().inset(16)
     }
     
@@ -159,7 +164,14 @@ class MusicPlayerViewController: UIViewController {
     listTableView.snp.makeConstraints { make in
       make.top.equalTo(titleTopLabel.snp.bottom).offset(10)
       make.left.right.equalToSuperview()
-      make.bottom.equalTo(cardView.snp.top)
+      make.bottom.equalToSuperview()
+    }
+    
+    view.addSubview(cardView)
+    cardView.snp.makeConstraints { make in
+      make.bottom.equalTo(view.safeAreaLayoutGuide)
+      make.left.equalToSuperview().offset(16)
+      make.right.equalToSuperview().offset(-16)
     }
   }
   
@@ -204,59 +216,5 @@ class MusicPlayerViewController: UIViewController {
   
   @objc private func playPauseButtonTapped() {
     musicPlayerViewModel.pauseTrack()
-  }
-}
-
-extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return musicPlayerViewModel.getListMusicsCount()
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let trackCell = listTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TrackViewCell else {
-      return UITableViewCell()
-    }
-    let trackList = musicPlayerViewModel.getTracks()
-    trackCell.configure(with: trackList[indexPath.item])
-    trackCell.backgroundColor = .clear
-    return trackCell
-  }
-  
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 70
-  }
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = UIColor(red: 17/255.0, green: 17/255.0, blue: 17/255.0, alpha: 1)
-      trackCell.trackNameLabel.textColor = .systemBlue
-      trackCell.playPauseButton.isHidden = false
-    }
-    
-    cardView.isHidden = false
-    
-    musicPlayerViewModel.startPlay(trackIndex: indexPath.row)
-  }
-  
-  func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .black
-    }
-  }
-  
-  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.trackNameLabel.textColor = .white
-      trackCell.playPauseButton.isHidden = true
-    }
-    
-  }
-  
-  
-  func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-    if let trackCell = tableView.cellForRow(at: indexPath) as? TrackViewCell {
-      trackCell.contentView.backgroundColor = .clear
-    }
   }
 }

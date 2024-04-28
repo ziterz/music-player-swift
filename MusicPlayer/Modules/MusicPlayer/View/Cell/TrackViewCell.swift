@@ -1,5 +1,5 @@
 //
-//  MusicViewCell.swift
+//  TrackViewCell.swift
 //  MusicPlayer
 //
 //  Created by Ziady Mubaraq on 27/04/24.
@@ -9,11 +9,11 @@ import UIKit
 
 class TrackViewCell: UITableViewCell {
   
-  // MARK: Properties
+  // MARK: - Views
   public lazy var trackNameLabel: UILabel = {
     let label = UILabel()
-    label.textColor = .white
-    label.font = .systemFont(ofSize: 19, weight: .semibold)
+    label.textColor = .black
+    label.font = .systemFont(ofSize: 18, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -22,7 +22,7 @@ class TrackViewCell: UITableViewCell {
   private lazy var trackArtistLabel: UILabel = {
     let label = UILabel()
     label.textColor = .lightGray
-    label.font = .systemFont(ofSize: 16, weight: .semibold)
+    label.font = .systemFont(ofSize: 15, weight: .medium)
     label.textAlignment = .left
     
     return label
@@ -42,7 +42,7 @@ class TrackViewCell: UITableViewCell {
   private lazy var stackView: UIStackView = {
     let view = UIStackView()
     view.axis = .vertical
-    view.spacing = 4
+    view.spacing = 0
     view.addArrangedSubview(trackNameLabel)
     view.addArrangedSubview(trackArtistLabel)
     
@@ -60,9 +60,10 @@ class TrackViewCell: UITableViewCell {
     return view
   }()
   
-  public func configure(with data: Track) {
-    self.trackNameLabel.text = data.trackName
-    self.trackArtistLabel.text = data.artistName
+  // MARK: - Functions
+  public func configure(with data: Datum) {
+    self.trackNameLabel.text = data.title
+    self.trackArtistLabel.text = data.artist.name
     
     self.addSubview(stackCardView)
     stackCardView.snp.makeConstraints { make in
@@ -76,6 +77,14 @@ class TrackViewCell: UITableViewCell {
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
+    
+    if selected {
+      trackNameLabel.textColor = .systemBlue
+      playPauseButton.isHidden = false
+    } else {
+      trackNameLabel.textColor = .label
+      playPauseButton.isHidden = true
+    }
   }
   
   override func prepareForReuse() {
