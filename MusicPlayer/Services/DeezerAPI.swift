@@ -12,7 +12,7 @@ final class DeezerAPI {
   
   // MARK: - Functions
   func fetchTracks() -> AnyPublisher<[Datum], Error> {
-    let url = URL(string: "https://api.deezer.com/artist/12246/top?limit=15")!
+    let url = URL(string: "https://api.deezer.com/artist/6241820/top?limit=15")!
     
     return URLSession.shared.dataTaskPublisher(for: url)
       .tryMap { element -> Data in

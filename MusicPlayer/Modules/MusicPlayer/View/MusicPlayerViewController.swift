@@ -29,7 +29,7 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
     let label = UILabel()
     label.text = "Listen Now"
     label.textColor = .black
-    label.font = .systemFont(ofSize: 28, weight: .bold)
+    label.font = .systemFont(ofSize: 26, weight: .bold)
     
     return label
   }()
@@ -177,6 +177,33 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
     }
   }
   
+  private func showLoading() {
+    let alertController = UIAlertController(title: nil, message: "Loading...", preferredStyle: .alert)
+    
+    let indicator = UIActivityIndicatorView(style: .medium)
+    indicator.translatesAutoresizingMaskIntoConstraints = false
+    indicator.startAnimating()
+    indicator.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    indicator.isUserInteractionEnabled = false
+    
+    alertController.view.snp.makeConstraints { make in
+      make.height.equalTo(100)
+    }
+    
+    
+    alertController.view.addSubview(indicator)
+    indicator.snp.makeConstraints { make in
+      make.centerX.equalTo(alertController.view)
+      make.top.equalTo(alertController.view.snp.centerY).offset(5)
+    }
+    
+    present(alertController, animated: true, completion: nil)
+  }
+  
+  private func dismissLoading() {
+    dismiss(animated: true, completion: nil)
+  }
+  
   private func bindToViewModel() {
     musicPlayerViewModel.$isPlaying
       .sink { [weak self] state in
@@ -215,6 +242,17 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
       .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         self?.listTableView.reloadData()
+      }
+      .store(in: &subscriptions)
+    
+    musicPlayerViewModel.$isLoading
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] isLoading in
+        if isLoading {
+          self?.showLoading()
+        } else {
+          self?.dismissLoading()
+        }
       }
       .store(in: &subscriptions)
   }

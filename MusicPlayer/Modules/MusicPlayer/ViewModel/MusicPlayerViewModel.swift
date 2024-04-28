@@ -21,6 +21,7 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
   // MARK: - Properties
   let deezerAPI = DeezerAPI()
   
+  @Published var isLoading = false
   @Published var currentTrackIndex = 0
   @Published var maxCurrentDuration: Double = 0
   @Published var currentDuration: Double = 0
@@ -34,6 +35,7 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
   
   // MARK: - Functions
   func fetchTracks() {
+    isLoading = true
     deezerAPI.fetchTracks()
       .sink(
         receiveCompletion: { status in
@@ -47,14 +49,16 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
           }
         },
         receiveValue: { tracks in
-          print("Data received \(tracks[0])")
+          print("Data received")
           self.tracks = tracks
+          self.isLoading = false
         }
       )
       .store(in: &subscriptions)
   }
   
   func searchArtistName(name: String) {
+    isLoading = true
     deezerAPI.searchTracksByArtist(name: name)
       .sink(
         receiveCompletion: { status in
@@ -68,8 +72,9 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
           }
         },
         receiveValue: { tracks in
-          print("Data received \(tracks[0])")
+          print("Data received")
           self.tracks = tracks
+          self.isLoading = false
         }
       )
       .store(in: &subscriptions)

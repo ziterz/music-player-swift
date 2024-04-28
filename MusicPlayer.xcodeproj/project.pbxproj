@@ -197,8 +197,9 @@
 		75E2A8872BDCD39F00F5BD73 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				75E2A8902BDCF50D00F5BD73 /* Cell */,
+				75E2A8882BDCD73800F5BD73 /* MusicPlayerViewController.swift */,
 				75E2A8AC2BDE3C8F00F5BD73 /* MusicPlayerViewController + TableView.swift */,
+				75E2A8902BDCF50D00F5BD73 /* Cell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -206,7 +207,6 @@
 		75E2A8902BDCF50D00F5BD73 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				75E2A8882BDCD73800F5BD73 /* MusicPlayerViewController.swift */,
 				75E2A8912BDCF53800F5BD73 /* TrackViewCell.swift */,
 			);
 			path = Cell;
