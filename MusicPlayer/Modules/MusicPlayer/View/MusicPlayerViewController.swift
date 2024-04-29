@@ -178,6 +178,7 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   }
   
   private func showLoading() {
+    listTableView.isHidden = true
     let alertController = UIAlertController(title: nil, message: "Loading...", preferredStyle: .alert)
     
     let indicator = UIActivityIndicatorView(style: .medium)
@@ -200,7 +201,18 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
     present(alertController, animated: true, completion: nil)
   }
   
+  private func showError(message: String) {
+    let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+    
+    let OKAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
+      alertController.dismiss(animated: true, completion: nil)
+    }
+    alertController.addAction(OKAction)
+    present(alertController, animated: true, completion: nil)
+  }
+  
   private func dismissLoading() {
+    listTableView.isHidden = false
     dismiss(animated: true, completion: nil)
   }
   

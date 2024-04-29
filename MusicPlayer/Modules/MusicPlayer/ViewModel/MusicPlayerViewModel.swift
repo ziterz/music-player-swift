@@ -41,9 +41,11 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
         receiveCompletion: { status in
           switch status {
           case .finished:
+            self.isLoading = false
             print("Completed")
             break
           case .failure(let error):
+            self.isLoading = false
             print("Receiver error \(error)")
             break
           }
@@ -51,7 +53,6 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
         receiveValue: { tracks in
           print("Data received")
           self.tracks = tracks
-          self.isLoading = false
         }
       )
       .store(in: &subscriptions)
@@ -64,9 +65,11 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
         receiveCompletion: { status in
           switch status {
           case .finished:
+            self.isLoading = false
             print("Completed")
             break
           case .failure(let error):
+            self.isLoading = false
             print("Receiver error \(error)")
             break
           }
@@ -74,7 +77,6 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
         receiveValue: { tracks in
           print("Data received")
           self.tracks = tracks
-          self.isLoading = false
         }
       )
       .store(in: &subscriptions)

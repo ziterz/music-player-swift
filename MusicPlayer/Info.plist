@@ -23,10 +23,5 @@
 	<array>
 		<string>audio</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIImageName</key>
-		<string>music-logo</string>
-	</dict>
 </dict>
 </plist>

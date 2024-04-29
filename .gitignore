@@ -60,3 +60,5 @@ playground.xcworkspace
 # *.xcworkspace
 
 .DS_Store
+**/.DS_Store
+*.tar

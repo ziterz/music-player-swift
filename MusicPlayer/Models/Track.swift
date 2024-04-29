@@ -11,7 +11,11 @@ import Foundation
 struct Track: Codable {
   let data: [Datum]
   let total: Int
-  let next: String
+  let next: String?
+  
+  enum CodingKeys: String, CodingKey {
+    case data, total, next
+  }
 }
 
 // MARK: - Datum
