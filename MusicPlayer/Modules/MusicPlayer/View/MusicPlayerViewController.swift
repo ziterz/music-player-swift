@@ -13,6 +13,7 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   
   // MARK: - Properties
   private var subscriptions = Set<AnyCancellable>()
+  private var timer: Timer?
   let musicPlayerViewModel = MusicPlayerViewModel()
   
   // MARK: - Views
@@ -86,6 +87,7 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
     slider.isUserInteractionEnabled = false
     slider.minimumValue = 0
     slider.value = 0
+    
     return slider
   } ()
   
@@ -218,10 +220,9 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   private func bindToViewModel() {
     musicPlayerViewModel.$isPlaying
       .sink { [weak self] state in
-        guard let self = self else { return }
         let imageName = state ? "pause.fill" : "play.fill"
         let image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 28)))
-        playPauseButton.setImage(image, for: .normal)
+        self?.playPauseButton.setImage(image, for: .normal)
       }
       .store(in: &subscriptions)
     
@@ -290,6 +291,17 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     artistSearchBar.endEditing(true)
+  }
+  
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    timer?.invalidate()
+    timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
+      self?.musicPlayerViewModel.searchArtistName(name: searchText)
+    }
+  }
+  
+  deinit {
+    timer?.invalidate()
   }
   
   @objc private func playPauseButtonTapped() {

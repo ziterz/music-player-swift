@@ -16,8 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     
-    do
-    {
+    do {
       try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
       try AVAudioSession.sharedInstance().setActive(true)
       
@@ -28,9 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        Otherwise you wont be able to hear any sound when you lock screen
        */
       //try AVAudioSession.sharedInstance().setPreferredSampleRate(4096)
-    }
-    catch
-    {
+    } catch {
       print(error)
     }
     // This will enable to show nowplaying controls on lock screen
