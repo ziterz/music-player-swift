@@ -19,7 +19,7 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
   private let artistSearchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.searchTextField.borderStyle = .roundedRect
-    searchBar.searchTextField.placeholder = "Search artist"
+    searchBar.searchTextField.placeholder = "Search artist and song title"
     searchBar.backgroundImage = UIImage()
     
     return searchBar
@@ -190,7 +190,6 @@ class MusicPlayerViewController: UIViewController, UISearchBarDelegate {
     alertController.view.snp.makeConstraints { make in
       make.height.equalTo(100)
     }
-    
     
     alertController.view.addSubview(indicator)
     indicator.snp.makeConstraints { make in

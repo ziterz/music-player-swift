@@ -13,7 +13,7 @@ extension MusicPlayerViewController: UITableViewDelegate, UITableViewDataSource 
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if musicPlayerViewModel.tracks.count == 0 {
-      tableView.setEmptyView(title: "Song list not available", message: "Try searching again using a different spelling or keyword")
+      tableView.setEmptyView(title: "Song not available", message: "Try searching again using a different spelling or keyword")
     } else {
       tableView.restore()
     }
