@@ -100,7 +100,11 @@ final class MusicPlayerViewModel: MusicPlayerViewModelProtocol {
     } else {
       newTrackIndex += 1
     }
-    startPlay(trackIndex: newTrackIndex)
+    if tracks.count == 0 {
+      pauseTrack()
+    } else {
+      startPlay(trackIndex: newTrackIndex)
+    }
   }
   
   func startPlay(trackIndex: Int) {
